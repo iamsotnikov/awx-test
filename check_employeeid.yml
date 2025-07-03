@@ -8,28 +8,12 @@
     employee_id: "{{ empid }}"
   tasks:
 
-    - name: Показать текущую директорию
-      shell: pwd
-      register: current_dir
+    - name: Сформировать команду в переменной
+      set_fact:
+        cmd_args: "{{ admin_login }} '{{ admin_password }}' {{ employee_id }}"
 
-    - debug:
-        msg: "Рабочая директория: {{ current_dir.stdout }}"
-
-    - name: Показать список файлов
-      shell: ls -l
-      register: file_list
-
-    - debug:
-        var: file_list.stdout_lines
-
-    - name: Показать параметры
-      debug:
-        msg:
-          - "Login: {{ admin_login }}"
-          - "EmpID: {{ employee_id }}"
-
-    - name: Запустить скрипт поиска
-      shell: ./search_by_employeeid.sh {{ admin_login }} "{{ admin_password }}" {{ employee_id }}
+    - name: Запустить скрипт через Ansible script
+      script: search_by_employeeid.sh {{ cmd_args }}
       register: result
 
     - name: Показать результат
