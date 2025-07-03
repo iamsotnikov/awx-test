@@ -7,6 +7,21 @@
     admin_password: "{{ password }}"
     employee_id: "{{ empid }}"
   tasks:
+
+    - name: Показать текущую директорию
+      shell: pwd
+      register: current_dir
+
+    - debug:
+        msg: "Рабочая директория: {{ current_dir.stdout }}"
+
+    - name: Показать список файлов
+      shell: ls -l
+      register: file_list
+
+    - debug:
+        var: file_list.stdout_lines
+
     - name: Показать параметры
       debug:
         msg:
