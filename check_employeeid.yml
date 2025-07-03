@@ -1,15 +1,20 @@
 ---
 - name: Поиск по employeeID
   hosts: localhost
+  gather_facts: no
   vars:
     admin_login: "{{ login }}"
     admin_password: "{{ password }}"
     employee_id: "{{ empid }}"
   tasks:
+    - name: Показать параметры
+      debug:
+        msg:
+          - "Login: {{ admin_login }}"
+          - "EmpID: {{ employee_id }}"
+
     - name: Запустить скрипт поиска
-      command: >
-        /home/sni/awx-projects/ad-check/search_by_employeeid.sh
-        {{ admin_login }} {{ admin_password }} {{ employee_id }}
+      shell: ./search_by_employeeid.sh {{ admin_login }} "{{ admin_password }}" {{ employee_id }}
       register: result
 
     - name: Показать результат
